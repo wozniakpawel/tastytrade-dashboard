@@ -2,6 +2,8 @@
 
 Track and analyze your trading performance with this simple dashboard. Simply upload your TastyTrade YTD CSV file to see your trading stats, P&L charts, and performance metrics. And worry not about privacy - all data is process locally in your browser.
 
+<img src="./dashboard-showcase.png" width="384" height="484">
+
 ## 🔒 Privacy
 
 All data processing occurs entirely in your browser. No data is uploaded to any external servers:
