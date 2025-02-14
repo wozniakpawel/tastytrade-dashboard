@@ -115,42 +115,90 @@
     <script>
         // Main data processing function
         function processTradeData(data) {
-            // Convert string dates to Date objects and process numeric values
-            data.forEach(row => {
-                row.CLOSE_DATE = new Date(row.CLOSE_DATE);
-                row.OPEN_DATE = new Date(row.OPEN_DATE);
+            // Helper function to parse dates consistently
+            function parseDate(dateStr) {
+                if (!dateStr) return new Date();
+                dateStr = dateStr.trim();
                 
-                // Convert numeric strings to numbers
-                ['TOTAL_GAINLOSS', 'NO_WS_PROCEEDS', 'NO_WS_GAINLOSS', 'NO_WS_COST'].forEach(col => {
-                    row[col] = parseFloat(row[col].replace(/[\$,]/g, ''));
-                });
-            });
+                // Handle YYYY-MM-DD format
+                if (dateStr.includes('-')) {
+                    return new Date(dateStr);
+                }
+                
+                // Handle MM/DD/YYYY format
+                const [month, day, year] = dateStr.split('/');
+                if (month && day && year) {
+                    return new Date(year, parseInt(month) - 1, day);
+                }
+                
+                // Fallback
+                return new Date(dateStr);
+            }
+
+            // Helper function to clean currency values
+            function parseCurrency(str) {
+                if (!str) return 0;
+                if (typeof str === 'number') return str;
+                // Remove currency symbol, commas, and whitespace, handle negative values
+                const cleanStr = str.replace(/[$,\s]/g, '');
+                return parseFloat(cleanStr) || 0;
+            }
+
+            // Process each row
+            const processedData = data.map(row => {
+                try {
+                    const processedRow = {
+                        ...row,
+                        CLOSE_DATE: parseDate(row.CLOSE_DATE),
+                        OPEN_DATE: parseDate(row.OPEN_DATE),
+                        TOTAL_GAINLOSS: parseCurrency(row.TOTAL_GAINLOSS),
+                        NO_WS_PROCEEDS: parseCurrency(row.NO_WS_PROCEEDS),
+                        NO_WS_GAINLOSS: parseCurrency(row.NO_WS_GAINLOSS),
+                        NO_WS_COST: parseCurrency(row.NO_WS_COST),
+                        QUANTITY: parseInt(row.QUANTITY) || 0
+                    };
+                    return processedRow;
+                } catch (error) {
+                    console.error('Error processing row:', row, error);
+                    return null;
+                }
+            }).filter(row => row !== null);
 
             // Sort chronologically
-            data.sort((a, b) => a.CLOSE_DATE - b.CLOSE_DATE);
+            processedData.sort((a, b) => a.CLOSE_DATE - b.CLOSE_DATE);
 
             // Calculate additional metrics
             let cumulativePnL = 0;
-            data.forEach(row => {
+            return processedData.map(row => {
                 // Holding period in days
-                row.HOLDING_PERIOD = (row.CLOSE_DATE - row.OPEN_DATE) / (1000 * 60 * 60 * 24);
+                const holdingPeriod = Math.max(0, (row.CLOSE_DATE - row.OPEN_DATE) / (1000 * 60 * 60 * 24));
                 
                 // Cumulative P&L
                 cumulativePnL += row.TOTAL_GAINLOSS;
-                row.CUMULATIVE_PNL = cumulativePnL;
                 
-                // ROI
-                row.ROI = (row.TOTAL_GAINLOSS / row.NO_WS_COST) * 100;
+                // Calculate ROI (avoid division by zero)
+                const roi = row.NO_WS_COST !== 0 ? (row.TOTAL_GAINLOSS / Math.abs(row.NO_WS_COST)) * 100 : 0;
 
-                // Extract option details
+                // Option symbol parsing
+                let underlying = row.SYMBOL;
+                let optionType = null;
+                let strike = null;
                 const symbolMatch = row.SYMBOL.match(/(\w+)--(\d+)([CP])(\d+)/);
                 if (symbolMatch) {
-                    [, row.UNDERLYING, row.EXPIRY, row.TYPE, row.STRIKE] = symbolMatch;
-                    row.STRIKE = parseFloat(row.STRIKE) / 1000;
+                    [, underlying, , optionType, strike] = symbolMatch;
+                    strike = parseFloat(strike) / 1000;
                 }
-            });
 
-            return data;
+                return {
+                    ...row,
+                    HOLDING_PERIOD: holdingPeriod,
+                    CUMULATIVE_PNL: cumulativePnL,
+                    ROI: roi,
+                    UNDERLYING: underlying,
+                    OPTION_TYPE: optionType,
+                    STRIKE: strike
+                };
+            });
         }
 
         // Create all plots
@@ -373,12 +421,21 @@
                 
                 Papa.parse(file, {
                     header: true,
-                    dynamicTyping: false, // We'll handle type conversion ourselves
                     skipEmptyLines: true,
                     complete: function(results) {
+                        if (results.errors.length > 0) {
+                            console.error('CSV parsing errors:', results.errors);
+                            alert('Error parsing CSV file. Please check the format.');
+                            return;
+                        }
+                        
                         try {
                             const processedData = processTradeData(results.data);
-                            createPlots(processedData);
+                            if (processedData && processedData.length > 0) {
+                                createPlots(processedData);
+                            } else {
+                                throw new Error('No valid data after processing');
+                            }
                         } catch (error) {
                             console.error('Error processing data:', error);
                             alert('Error processing data. Please check the CSV format and try again.');
