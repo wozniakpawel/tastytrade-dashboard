@@ -4,6 +4,13 @@ Track and analyze your trading performance with this simple dashboard. Simply up
 
 <img src="./dashboard-showcase.png" width="384" height="484">
 
+## 💖 Support the Project
+If you find this tool helpful, consider supporting its development:
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-wozniakpawel-orange?style=flat-square&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/wozniakpawel) [![GitHub Sponsor](https://img.shields.io/badge/GitHub-wozniakpawel-green?style=flat-square&logo=github)](https://github.com/sponsors/wozniakpawel)
+
+Your support helps maintain and improve this free, open-source tool!
+
 ## 🔒 Privacy
 
 All data processing occurs entirely in your browser. No data is uploaded to any external servers:
