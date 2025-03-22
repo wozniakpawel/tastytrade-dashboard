@@ -1,0 +1,80 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f5f5f5;
+}
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.upload-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+.upload-button {
+  background: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+.upload-button:hover {
+  background: #45a049;
+}
+.plots-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(2, 1fr);
+}
+.plot-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.summary-stats {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.stat-item {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  text-align: center;
+}
+.stat-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+.stat-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+@media (max-width: 1200px) {
+  .plots-grid {
+    grid-template-columns: 1fr;
+  }
+}
