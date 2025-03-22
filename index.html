@@ -151,7 +151,7 @@
                         ...row,
                         CLOSE_DATE: parseDate(row.CLOSE_DATE),
                         OPEN_DATE: parseDate(row.OPEN_DATE),
-                        TOTAL_GAINLOSS: parseCurrency(row.TOTAL_GAINLOSS),
+                        TOTAL_GAINLOSS: parseCurrency(row.NO_WS_GAINLOSS),
                         NO_WS_PROCEEDS: parseCurrency(row.NO_WS_PROCEEDS),
                         NO_WS_GAINLOSS: parseCurrency(row.NO_WS_GAINLOSS),
                         NO_WS_COST: parseCurrency(row.NO_WS_COST),
@@ -173,7 +173,7 @@
                 // Holding period in days
                 const holdingPeriod = Math.max(0, (row.CLOSE_DATE - row.OPEN_DATE) / (1000 * 60 * 60 * 24));
                 
-                // Cumulative P&L
+                // Cumulative P&L using NO_WS_GAINLOSS
                 cumulativePnL += row.TOTAL_GAINLOSS;
                 
                 // Calculate ROI (avoid division by zero)
