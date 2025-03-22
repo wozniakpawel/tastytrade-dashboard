@@ -376,11 +376,17 @@
                 _.sumBy(trades, 'TOTAL_GAINLOSS')
             )[0];
 
+            // Find the biggest single gain and loss
+            const biggestGain = _.maxBy(data, 'TOTAL_GAINLOSS');
+            const biggestLoss = _.minBy(data, 'TOTAL_GAINLOSS');
+
             const stats = {
                 'Total P&L': formatCurrency(_.sumBy(data, 'TOTAL_GAINLOSS')),
                 'Win Rate': `${(data.filter(d => d.TOTAL_GAINLOSS > 0).length / data.length * 100).toFixed(1)}%`,
                 'Average Win': formatCurrency(_.meanBy(data.filter(d => d.TOTAL_GAINLOSS > 0), 'TOTAL_GAINLOSS')),
                 'Average Loss': formatCurrency(Math.abs(_.meanBy(data.filter(d => d.TOTAL_GAINLOSS < 0), 'TOTAL_GAINLOSS'))),
+                'Biggest Gain': `${formatCurrency(biggestGain.TOTAL_GAINLOSS)}`,
+                'Biggest Loss': `${formatCurrency(biggestLoss.TOTAL_GAINLOSS)}`,
                 'Average ROI': `${_.meanBy(data, 'ROI').toFixed(1)}%`,
                 'Max ROI': `${_.maxBy(data, 'ROI').ROI.toFixed(1)}%`,
                 'Average Hold Time': `${_.meanBy(data, 'HOLDING_PERIOD').toFixed(1)} days`,
