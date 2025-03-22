@@ -295,7 +295,7 @@
 
             // 8. Trade Size vs ROI
             createPlot({
-                x: data.map(d => d.NO_WS_COST),
+                x: data.map(d => Math.abs(d.NO_WS_COST)),
                 y: data.map(d => d.ROI),
                 mode: 'markers',
                 type: 'scatter',
