@@ -1,6 +1,6 @@
 # TastyTrade Analytics Dashboard
 
-Track and analyze your trading performance with this simple dashboard. Simply upload your TastyTrade YTD CSV file to see your trading stats, P&L charts, and performance metrics. And worry not about privacy - all data is process locally in your browser.
+Track and analyze your trading performance with this simple dashboard. Simply upload your TastyTrade YTD CSV file to see your trading stats, P&L charts, and performance metrics. And worry not about privacy - all data is processed locally in your browser.
 
 <img src="./dashboard-showcase.png" width="384" height="484">
 
@@ -24,10 +24,19 @@ All data processing occurs entirely in your browser. No data is uploaded to any 
 - Monthly P&L distribution analysis
 - Individual trade performance metrics
 - ROI analysis and visualization
-- Trade holding period analysis
+- Trade holding period distribution
+- P&L distribution analysis
 - Win rate statistics by holding period
 - Position size vs. ROI correlation
-- Comprehensive summary statistics
+- Comprehensive summary statistics including:
+  - Total P&L
+  - Win rate
+  - Average win/loss
+  - Biggest gain/loss
+  - Average ROI
+  - Max ROI
+  - Average hold time
+  - Best trading month
 
 ## 🚀 Usage
 
